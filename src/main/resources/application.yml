@@ -1,0 +1,28 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /
+  
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password: 123456
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings:
+        web-allow-others: true
+
+jwtkey: 
+  publicKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtOt5fhvZ3wSa2KIrXuNht3w1EhkVCAxGV7aX6uDddfN1W33S2TUy54UWKN2szO6Q3DK9ce3EyjvxZNfUfJBDETnvvfOZNWL/giby7uIb5AXdkurrUCDCmfYT+wATwWKMGbWoZ+52yapG439b1rHW9ERZVqrGaF9wk7LmP2IwyYnUHoZX2tguLDjmVRRcZZMJeTjMnVn+4do4kJHUiq93PAzo8EF7DayxjwME/slCl3KxwR+NeZr6mXRsDnUFhCrkoszEiQYNW+ZWjas4SwPrk9ATb05cy/Jy9uGq8MzUGf9j2hNIglwZO6bXemI4qkUp87Txq0lQMphdg1xFKLDZ4wIDAQAB\n-----END PUBLIC KEY-----"
