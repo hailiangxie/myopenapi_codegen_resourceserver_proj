@@ -1,0 +1,1 @@
+# myopenapi_codegen_resourceserver_proj
