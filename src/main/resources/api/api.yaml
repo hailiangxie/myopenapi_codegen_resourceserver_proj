@@ -148,6 +148,77 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
       security:
         - bearerAuth: []
+  /customer/findByEmail/{email}:
+    get:
+      tags:
+        - customer
+      summary: Find customer by email
+      description: Returns a single customer
+      operationId: getCustomerByEmail
+      parameters:
+        - name: email
+          in: path
+          description: Email address of customer to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: Invalid email address supplied
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Customer not found
+      security:
+        - api_key: []
+        - bearerAuth: []
+  /customer/{customerId}/uploadImage:
+    post:
+      tags:
+        - customer
+      summary: uploads an image
+      description: ''
+      operationId: uploadFile
+      parameters:
+        - name: customerId
+          in: path
+          description: ID of customer to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security:
+        - api_key: []
+        - bearerAuth: []
 components:
   schemas:
     Customer:

@@ -29,6 +29,11 @@ public class CustomerServiceImpl implements CustomerService {
 	public Optional<Customer> findCustomerById(long id) {
 		return customerRepository.findById(id);
 	}
+	
+	@Override
+	public Optional<Customer> findCustomerByEmail(String email) {
+		return Optional.of(customerRepository.findByEmail(email));
+	}
 
 	@Override
 	@Transactional
