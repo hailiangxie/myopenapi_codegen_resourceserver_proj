@@ -69,4 +69,17 @@ public class CustomerApiDelegateImpl implements CustomerApiDelegate {
 		}
 		return new ResponseEntity<>(customerMapper.toDto(customer), HttpStatus.OK);
 	}
+	
+	@Override
+	public ResponseEntity<CustomerJson> getCustomerByEmail(String email) {
+		Customer customer = null;
+		try {
+			customer = customerService.findCustomerByEmail(email)
+					.orElseThrow(() -> new Exception("Customer not found: " + email));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(customerMapper.toDto(customer), HttpStatus.OK);
+	}
 }

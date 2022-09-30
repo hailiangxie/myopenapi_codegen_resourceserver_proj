@@ -1,6 +1,7 @@
 package xie.hailiang.resourceserver.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -104,5 +105,14 @@ class CustomerServiceTest {
 		}
 		
 		verify(customerRepository, times(1)).deleteById(customer.getId());;
+    }
+	
+	@Test
+    public void test5_givenExistingCustomer_whenFindCustomerByEmail_returnCustomer() {
+		when(customerRepository.findByEmail(customer.getEmail())).thenReturn(customer);
+		
+		Optional<Customer> foundCustomer = customerService.findCustomerByEmail(customer.getEmail());
+		assertTrue(!foundCustomer.isEmpty());
+		assertThat(foundCustomer.get().getEmail()).isSameAs(customer.getEmail());
     }
 }

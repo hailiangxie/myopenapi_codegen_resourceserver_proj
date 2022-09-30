@@ -202,4 +202,23 @@ class MyOpenApiCodegenResourceServerApplicationTests {
     	Optional<Customer> deleted = CustomerService.findCustomerById(created.getId());
     	assertTrue(deleted.isEmpty());
     }
+    
+    @Test
+    public void test11_givenValidToken_whenGetExistingCustomerByEmail_thenOK() throws Exception {
+    	Customer created = CustomerService.addCustomer(customer);
+    	assertThat(created).isNotNull();
+    	
+    	MvcResult result = mockMvc.perform(
+    								get("/api/v3/customer/findByEmail/" + created.getEmail())
+    								.header("Authorization", "Bearer " + accessToken)
+    								.accept(MediaType.APPLICATION_JSON)
+    								.contentType(MediaType.APPLICATION_JSON)
+    		)
+    		.andExpect(status().isOk())
+    		.andReturn();
+    	
+    	var returnObj = new JSONObject(result.getResponse().getContentAsString());
+    	String email = returnObj.getString("email");
+    	assertEquals("ali@email.com", email);
+    }
 }
