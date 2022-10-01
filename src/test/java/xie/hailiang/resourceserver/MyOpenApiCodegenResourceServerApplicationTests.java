@@ -5,10 +5,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Optional;
 
 import org.json.JSONObject;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -220,5 +224,24 @@ class MyOpenApiCodegenResourceServerApplicationTests {
     	var returnObj = new JSONObject(result.getResponse().getContentAsString());
     	String email = returnObj.getString("email");
     	assertEquals("ali@email.com", email);
+    }
+    
+    @Test
+    public void test12_givenValidToken_whenUploadFileById_thenOK() throws Exception {
+    	Customer created = CustomerService.addCustomer(customer);
+    	assertThat(created).isNotNull();
+    	
+    	String fileName = "sample-file-mock.txt";
+		MockMultipartFile toUploadFile = new MockMultipartFile("file", fileName, null, "This is content.".getBytes());
+    	MvcResult result = mockMvc.perform(
+    								multipart("/api/v3/customer/" + created.getId() + "/uploadImage").file(toUploadFile)
+    								.header("Authorization", "Bearer " + accessToken)
+    		)
+    		.andExpect(status().isOk())
+    		.andReturn();
+    	
+    	var returnObj = new JSONObject(result.getResponse().getContentAsString());
+    	String code = returnObj.getString("code");
+    	assertEquals("200", code);
     }
 }
