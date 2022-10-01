@@ -1,14 +1,19 @@
 package xie.hailiang.resourceserver.api;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import xie.hailiang.resourceserver.entity.Customer;
 import xie.hailiang.resourceserver.mapper.CustomerMapper;
+import xie.hailiang.resourceserver.model.ApiResponseJson;
 import xie.hailiang.resourceserver.model.CustomerJson;
 import xie.hailiang.resourceserver.service.CustomerService;
+import xie.hailiang.resourceserver.service.StorageService;
 
 /**
  * 
@@ -21,11 +26,13 @@ public class CustomerApiDelegateImpl implements CustomerApiDelegate {
 	
 	private final CustomerService customerService;
 	private final CustomerMapper customerMapper;
+	private final StorageService storageService;
 	
 	@Autowired
-	public CustomerApiDelegateImpl(CustomerService customerService, CustomerMapper customerMapper) {
+	public CustomerApiDelegateImpl(CustomerService customerService, CustomerMapper customerMapper, StorageService storageService) {
 		this.customerService = customerService;
 		this.customerMapper = customerMapper;
+		this.storageService = storageService;
 	}
 	
 	@Override
@@ -81,5 +88,21 @@ public class CustomerApiDelegateImpl implements CustomerApiDelegate {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(customerMapper.toDto(customer), HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<ApiResponseJson> uploadFile(Long customerId, MultipartFile fileName) {
+		ApiResponseJson responseJson = new ApiResponseJson();
+		try {
+			storageService.createStorageLocationById(customerId);
+			storageService.store(fileName);
+			responseJson.setCode(200);
+			responseJson.setMessage("Upload file successfully!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(responseJson, HttpStatus.OK);
 	}
 }

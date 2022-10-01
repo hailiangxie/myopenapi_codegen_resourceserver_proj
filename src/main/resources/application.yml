@@ -26,3 +26,7 @@ spring:
 
 jwtkey: 
   publicKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtOt5fhvZ3wSa2KIrXuNht3w1EhkVCAxGV7aX6uDddfN1W33S2TUy54UWKN2szO6Q3DK9ce3EyjvxZNfUfJBDETnvvfOZNWL/giby7uIb5AXdkurrUCDCmfYT+wATwWKMGbWoZ+52yapG439b1rHW9ERZVqrGaF9wk7LmP2IwyYnUHoZX2tguLDjmVRRcZZMJeTjMnVn+4do4kJHUiq93PAzo8EF7DayxjwME/slCl3KxwR+NeZr6mXRsDnUFhCrkoszEiQYNW+ZWjas4SwPrk9ATb05cy/Jy9uGq8MzUGf9j2hNIglwZO6bXemI4qkUp87Txq0lQMphdg1xFKLDZ4wIDAQAB\n-----END PUBLIC KEY-----"
+  
+storage:
+  service:
+    base-path: D:/qycache/upload/files
